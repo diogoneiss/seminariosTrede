@@ -47,7 +47,9 @@ class Competidora {
 	 * @param entrada string completa da entrada
 	 */
 	public void inserirCompetidora(String entrada){
-		
+
+		this.tempoProblema = new int[6];
+
 		//dividir o arranjo em dois, pelo ;
 		String arranjoParcial[] = entrada.split(";");
 		this.nome = arranjoParcial[0];
