@@ -23,7 +23,7 @@ public class Programadoras {
 			arranjoCompetidoraes[i] = new Competidora(entradas[i]);
 			arranjoCompetidoraes[i].calcularAproveitamento();
 		}
-		
+		Competidora.mostrarMaiorPontuador(arranjoCompetidoraes);
 		input.close();
 
 	}
@@ -34,14 +34,18 @@ class Competidora {
 	public int tempototal;
 	public String nome;
 
-	//armazenará um double, que indica a idade da pessoal, mes e dia, para facilitar comparações
 	public int problemasFeitos;
 
 	
 	Competidora(String entrada){
 		inserirCompetidora(entrada);
 	}
-
+	public void imprimir(){
+		System.out.println("Nome+ "+nome);
+		System.out.println("Tempo total+ "+tempototal);
+		System.out.println("Problemas feitos+ "+problemasFeitos);
+		System.out.println();
+	}
 	/**
 	 * 
 	 * @param entrada string completa da entrada
@@ -53,9 +57,7 @@ class Competidora {
 		//dividir o arranjo em dois, pelo ;
 		String arranjoParcial[] = entrada.split(";");
 		this.nome = arranjoParcial[0];
-		System.out.println(nome);
 		for (int i = 1; i < arranjoParcial.length; i++) {
-			System.out.println(arranjoParcial[i]);
 			this.tempoProblema[i-1] = Integer.parseInt(arranjoParcial[i]);
 		}		
 		this.problemasFeitos = 6;
@@ -75,46 +77,34 @@ class Competidora {
 
 	
 	public static void mostrarMaiorPontuador(Competidora conjunto[]){
-	
-		int elementoEscolhido = 0;
+		int resposta = calcularMelhoresTempos(conjunto);
 
-		int respostas[] = calcularMelhoresTempos(conjunto);
-		for (int i = respostas.length-1; i > 0; i--) {
-			if(respostas[i] != 0){
-				elementoEscolhido = i;
-				i = 0;
-			}
-		}
-
-
-		System.out.printf("%s\n", conjunto[elementoEscolhido].nome);
-		System.out.printf("%d PROBLEMAS\n", conjunto[elementoEscolhido].problemasFeitos);
-		System.out.printf("%d MINUTOS\n", conjunto[elementoEscolhido].tempototal);
-	
+		System.out.printf("%s\n", conjunto[resposta].nome);
+		System.out.printf("%d PROBLEMAS\n", conjunto[resposta].problemasFeitos);
+		System.out.printf("%d MINUTOS\n", conjunto[resposta].tempototal);
 	}
-	private static int[] calcularMelhoresTempos(Competidora conjunto[]){
-		int respostas[] = new int[6];
-		int melhorPontuacao;
-		int elementoMelhor;
+	//retorna a pos no arranjo que o melhor tempo está
+	private static int calcularMelhoresTempos(Competidora conjunto[]){
+		int maiorNumProblemas = 0;
+		int melhorPontuacao = 120;
+		int elementoMelhor = 0;
 
-		/**
-		 * Armazena os melhores resultados para x problemas feitos, isto é,  0 problemas feitos, 1 problema feito, e ai em diante.
-		 */
-
-		for (int i = 0; i < respostas.length; i++) {
-			melhorPontuacao = 120;
-			elementoMelhor = 0;
-			for (int j = 0; j < conjunto.length; j++) {
-				if(conjunto[j].problemasFeitos == i && conjunto[j].tempototal < melhorPontuacao){
-					elementoMelhor = j;
-
-					melhorPontuacao = conjunto[elementoMelhor].tempototal;
-					respostas[i] = elementoMelhor;
-				}
+		//achar maior numero de problemas resolvidos
+		for (int i = 0; i < conjunto.length; i++) {
+			if(conjunto[i].problemasFeitos > maiorNumProblemas){
+				maiorNumProblemas = conjunto[i].problemasFeitos;
 			}
 		}
 
-		return respostas;
+		//achar a posicao com o melhor elemento para aquele num de problemas
+		for (int j = 0; j < conjunto.length; j++) {
+			if(conjunto[j].problemasFeitos == maiorNumProblemas && conjunto[j].tempototal < melhorPontuacao){
+					elementoMelhor = j;
+					melhorPontuacao = conjunto[elementoMelhor].tempototal;	
+			}
+		}
+		
+		return elementoMelhor;
 	}
 }
 
